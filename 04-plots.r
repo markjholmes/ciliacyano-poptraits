@@ -1,16 +1,11 @@
 source("03-model-info.r")   # load data
 library("ggh4x")            # plotting help
 library("Hmisc")            # capitalize
-library("ggnewscale")       # fig 2
 library("ggpubr")           # some plots are unpleasant
 
 # ==============================================================================
 # preamble
 # ==============================================================================
-
-if (!dir.exists("figures")) {
-    dir.create("figures")
-}
 
 # ------------------------------------------------------------------------------
 # functions
@@ -173,8 +168,8 @@ size_long <- bind_rows(list(size_by_system, size_by_clade, size_by_strain)) %>%
 # ------------------------------------------------------------------------------
 
 pc_data <- bind_rows(
-    read.csv("data/cyanobacteria-pca-loadings.csv") %>% mutate(system = "Cyanobacteria"), 
-    read.csv("data/ciliates-pca-loadings.csv") %>% mutate(system = "Ciliates")) %>%
+    read.csv("data/cyanobacteria/pca-loadings.csv") %>% mutate(system = "Cyanobacteria"), 
+    read.csv("data/ciliates/pca-loadings.csv") %>% mutate(system = "Ciliates")) %>%
     dplyr::select(system, strain, treat, trait, PC1) %>%
     mutate(treat = factor(treat, levels = c("C", "T", "A", "AT")),
         clade = str_split_i(strain, "_", 1))
@@ -233,7 +228,6 @@ pch_traits <- c(
     "Phycocyanin" = 6
 )
 
-
 # ------------------------------------------------------------------------------
 # FIG S3
 # ------------------------------------------------------------------------------
@@ -261,9 +255,6 @@ p1 <- ggplot(data_synth) +
         panel.grid.minor = element_blank(), axis.title.x = element_blank())
 
 p1 <- tag_facet(p1)
-
-# ggsave("figures/fig-s03.pdf", p, width = 6, height = 2.5, device = "pdf")
-
 
 p2 <- ggplot(pc_data) +
     aes(x = interaction(str_split_i(strain, "_", 2), clade),
@@ -451,7 +442,7 @@ for (model_system in c("cilia", "cyano")) {
     }
 
     # --------------------------------------------------------------------------
-    # Figures S4 and S5
+    # Figures S3 and S4
     # --------------------------------------------------------------------------
     
     # plot pcgr vs. pop.
@@ -476,7 +467,7 @@ for (model_system in c("cilia", "cyano")) {
     }
 
     # --------------------------------------------------------------------------
-    # Figures S6 and S7
+    # Figures S5 and S6
     # --------------------------------------------------------------------------
 
     # plot dT vs. trait 
@@ -503,7 +494,7 @@ for (model_system in c("cilia", "cyano")) {
 }
 
 # ------------------------------------------------------------------------------
-# Figure S8
+# Figure S7
 # ------------------------------------------------------------------------------
 
 # plot R squared
@@ -535,7 +526,7 @@ p <- tag_facet(p)
 ggsave("figures/fig-s07.pdf", p, width = 6, height = 6, device = "pdf")
 
 # ------------------------------------------------------------------------------
-# Figure S9
+# Figure S8
 # ------------------------------------------------------------------------------
 
 # form "pcgr ~ density"
@@ -571,7 +562,7 @@ p <- tag_facet(p)
 ggsave("figures/fig-s08.pdf", p, width = 6 * 0.833, height = 8 * 0.75)
 
 # ------------------------------------------------------------------------------
-# Figure S10
+# Figure S9
 # ------------------------------------------------------------------------------
 
 p <- ggplot(size_long %>% dplyr::filter(level != "clade")) +
@@ -605,7 +596,7 @@ p <- tag_facet(p)
 ggsave("figures/fig-s09.pdf", p, width = 7, height = 5.5, device = "pdf")
 
 # ------------------------------------------------------------------------------
-# Figure S11
+# Figure S10
 # ------------------------------------------------------------------------------
 
 bootstrapped_models <- readRDS("data/boot-test-results.RData") %>%
