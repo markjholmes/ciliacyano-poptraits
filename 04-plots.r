@@ -84,6 +84,9 @@ alpha_map <- c(
     "strain" = 1
 )
 
+# create bars to better separate strains
+vline_pos <- (0.5):(length(unique(data_synth$strain)) - 0.5)
+
 # ------------------------------------------------------------------------------
 # plotting shorthands
 # ------------------------------------------------------------------------------
@@ -304,12 +307,12 @@ p <- ggplot(main_long) +
         y = "Prediction accuracy difference",
         col = "Treatment") +
     theme_bw() +
-    guides(shape = guide_legend(override.aes = list(size = c(rep(3, 2), rep(1.5, 10)))))
+    guides(shape = guide_legend(override.aes = list(size = c(rep(4, 2), rep(2, 10)))))
 
 p <- tag_facet(p)
 
 ggsave("figures/fig-03.pdf", p, width = 7, height = 5.5)
-d
+
 # ==============================================================================
 # Figure 4
 # ==============================================================================
@@ -378,13 +381,13 @@ p <- ggplot(boot_mod_plot %>% dplyr::filter(!is.na(strain))) +
         color = "Treatment") +
     # theming
     theme_bw() +
-    theme(legend.box = "horizontal") +
+    theme(legend.box = "vertical") +
     guides(color = guide_legend(override.aes = list(size = 4, alpha = 1)),
         pch = guide_legend(override.aes = list(alpha = 1)))
 
 p <- tag_facet(p, hjust = -0.25)
 
-ggsave("figures/fig-04.pdf", p, width = 8, height = 4)
+ggsave("figures/fig-04.pdf", p, width = 8, height = 5)
 
 # ==============================================================================
 # Supplementary
@@ -394,9 +397,6 @@ ggsave("figures/fig-04.pdf", p, width = 8, height = 4)
 # switch between by uncommenting if needed:
 # model_system <- "cilia"
 # model_system <- "cyano"
-
-# create bars to better separate strains
-vline_pos <- (0.5):(length(unique(data_synth$strain)) - 0.5)
 
 for (model_system in c("cilia", "cyano")) {
 
@@ -589,7 +589,7 @@ p <- ggplot(size_long %>% dplyr::filter(level != "clade")) +
         y = "Prediction accuracy difference",
         col = "Treatment") +
     theme_bw() +
-    guides(shape = guide_legend(override.aes = list(size = c(rep(3, 2), rep(1.5, 10)))))
+    guides(shape = guide_legend(override.aes = list(size = c(rep(4, 2), rep(2, 10)))))
 
 p <- tag_facet(p)
 
@@ -656,11 +656,12 @@ p <- ggplot(boot_mod_plot %>% dplyr::filter(!is.na(strain))) +
     scale_color_manual(values = treat_palette) +
     labs(y = "Augmented model bootstrapped probability (1 - p)",
         x = "System", 
-        pch = "Strain",
+        pch = "System and strain",
         color = "Treatment") +
     theme(legend.box = "horizontal") +
-    guides(color = guide_legend(override.aes = list(size = 4, alpha = 1)),
-        pch = guide_legend(override.aes = list(alpha = 1)))
+    guides(color = guide_legend(override.aes = list(size = 4, alpha = 1), order = 2),
+        pch = guide_legend(override.aes = list(size = c(rep(4, 2), rep(2, 10)),
+            alpha = 1), order = 1))
 
 p <- tag_facet(p, hjust = -0.25)
 
