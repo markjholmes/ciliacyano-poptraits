@@ -377,7 +377,7 @@ p <- ggplot(boot_mod_plot %>% dplyr::filter(!is.na(strain))) +
     scale_color_manual(values = treat_palette) +
     labs(y = "Augmented model bootstrapped probability (1 - p)",
         x = "System", 
-        pch = "Strain",
+        pch = "System & strain",
         color = "Treatment") +
     # theming
     theme_bw() +
